@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Control</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/alasql@1.7.3/dist/alasql.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <aside class="sidebar">
+        <h2>SupleAdmin</h2>
+        <div class="user-mini-profile">
+            <div class="avatar-circle">A</div>
+            <span id="sidebar-username">Admin</span>
+        </div>
+        <nav>
+            <a href="#" onclick="cambiarSeccion('inventario')" class="nav-link active" id="link-inventario"> Inventario</a>
+            <a href="#" onclick="cambiarSeccion('ventas')" class="nav-link" id="link-ventas"> Ventas</a>
+            <a href="#" onclick="cambiarSeccion('config')" class="nav-link" id="link-config"> Configuración</a>
+        </nav>
+        <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+    </aside>
+
+    <main class="main-content">
+        
+        <div class="stats-container">
+            <div class="card">
+                <h3>Dinero en Caja</h3>
+                <p id="stat-caja">$0.00</p>
+                <button onclick="modificarCaja()" class="btn-small-text">Editar (Requiere Pass)</button>
+            </div>
+            <div class="card">
+                <h3>Ventas Totales</h3>
+                <p id="stat-ganancias">$0.00</p>
+            </div>
+            <div class="card">
+                <h3>Valor Inventario</h3>
+                <p id="stat-valor">$0.00</p>
+            </div>
+        </div>
+
+        <section id="sec-inventario" class="seccion-activa">
+            <header>
+                <h1>Gestión de Inventario</h1>
+                <button id="btn-abrir-modal" class="btn-primary">+ Nuevo Producto</button>
+            </header>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones Rápidas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-inventario"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="sec-ventas" class="seccion-oculta">
+            <header>
+                <h1>Historial de Ventas</h1>
+                <button onclick="borrarHistorial()" class="btn-delete">Borrar Historial</button>
+            </header>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Venta</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-ventas"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="sec-config" class="seccion-oculta">
+            <header>
+                <h1>Perfil del Administrador</h1>
+            </header>
+            <div class="config-card">
+                <h3>Información Personal</h3>
+                <form id="form-config">
+                    <label>Nombre del Administrador:</label>
+                    <input type="text" id="admin-nombre" placeholder="Tu nombre">
+                    <label>Rol:</label>
+                    <input type="text" value="Gerente General" disabled>
+                    <label>Correo de contacto:</label>
+                    <input type="email" id="admin-email" placeholder="correo@tienda.com">
+                    <button type="submit" class="btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Agregar Producto</h2>
+        <form id="form-producto">
+            <input type="text" id="nombre" placeholder="Nombre" required>
+            <select id="categoria">
+                <option value="Proteína">Proteína</option>
+                <option value="Creatina">Creatina</option>
+                <option value="Pre-entreno">Pre-entreno</option>
+            </select>
+            <input type="number" id="precio" placeholder="Precio ($)" required>
+            <input type="number" id="stock" placeholder="Stock Inicial" required>
+            <button type="submit" class="btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
