@@ -65,11 +65,13 @@ function renderInventario() {
     let productos = alasql("SELECT * FROM inventario ORDER BY id DESC");
 
     productos.forEach(p => {
+        let colorStock = p.stock < 5 ? '#ef4444' : '#334155';
+        
         tbody.innerHTML += `
             <tr>
-                <td><b>${p.nombre}</b><br><small style="color:#888">${p.categoria}</small></td>
+                <td><b>${p.nombre}</b><br><small style="color:#64748b">${p.categoria}</small></td>
                 <td>$${p.precio}</td>
-                <td style="color:${p.stock < 5 ? 'red' : 'black'}"><b>${p.stock}</b> un.</td>
+                <td style="color:${colorStock}"><b>${p.stock}</b> un.</td>
                 <td>
                     <button class="btn-action btn-add" title="Resurtir (+1)" onclick="modificarStock(${p.id}, 1)">+</button>
                     <button class="btn-action btn-sell" title="Vender" onclick="venderProducto(${p.id})">$</button>
@@ -91,7 +93,7 @@ function renderVentas() {
                 <td>#${v.id}</td>
                 <td>${v.producto}</td>
                 <td>${v.cantidad}</td>
-                <td style="color:green; font-weight:bold">+$${v.total}</td>
+                <td style="color:#10b981; font-weight:bold">+$${v.total}</td>
                 <td>${v.fecha}</td>
             </tr>
         `;
