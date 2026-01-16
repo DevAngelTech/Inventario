@@ -10,13 +10,32 @@
 </head>
 <body>
 
-<div class="container">
+<div id="login-screen">
+    <div class="login-card">
+        <h2>SupleAdmin</h2>
+        <p style="color:#64748b; margin-top:0;">Sistema de Gestión</p>
+        
+        <div class="login-hint">
+            <p style="margin:5px 0;"><strong>Credenciales Demo:</strong></p>
+            <p style="margin:5px 0;">Usuario: <strong>admin</strong> (o tu nombre)</p>
+            <p style="margin:5px 0;">Contraseña: <strong>admin</strong></p>
+        </div>
+
+        <form onsubmit="event.preventDefault(); iniciarSesionApp();">
+            <input type="text" id="login-user" placeholder="Usuario" required>
+            <input type="password" id="login-pass" placeholder="Contraseña" required>
+            <button type="submit" class="btn-primary" style="width:100%; padding:15px;">Iniciar Sesión</button>
+        </form>
+    </div>
+</div>
+
+<div class="container" id="app-container" style="display:none;">
     <div id="mobile-overlay" class="overlay"></div>
 
     <aside class="sidebar" id="sidebar">
         <h2>SupleAdmin</h2>
         <div class="user-mini-profile">
-            <div class="avatar-circle">A</div>
+            <div class="avatar-circle" id="avatar-letra">A</div>
             <span id="sidebar-username">Admin</span>
         </div>
         <nav>

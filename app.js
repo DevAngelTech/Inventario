@@ -6,6 +6,30 @@ let NOMBRE_ADMIN = "Admin";
 
 cargarDatos();
 
+window.iniciarSesionApp = function() {
+    let u = document.getElementById("login-user").value;
+    let p = document.getElementById("login-pass").value;
+
+    if(p === "admin") {
+
+        NOMBRE_ADMIN = u || "Admin"; 
+        
+        document.getElementById("sidebar-username").innerText = NOMBRE_ADMIN;
+        document.getElementById("admin-nombre").value = NOMBRE_ADMIN;
+        document.getElementById("avatar-letra").innerText = NOMBRE_ADMIN.charAt(0).toUpperCase();
+
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("app-container").style.display = "flex";
+        
+        if(window.innerWidth < 768) {
+            document.getElementById("app-container").style.display = "block";
+        }
+
+    } else {
+        alert("Contraseña incorrecta.\n\n(Para Demo: la contraseña es 'admin')");
+    }
+}
+
 function cargarDatos() {
     let invGuardado = localStorage.getItem("db_inventario");
     if (invGuardado) {
@@ -25,12 +49,7 @@ function cargarDatos() {
     }
 
     CAJA_CHICA = parseFloat(localStorage.getItem("db_caja")) || 1000;
-    NOMBRE_ADMIN = localStorage.getItem("db_admin_nombre") || "Admin";
     
-    if(document.getElementById("sidebar-username")) {
-        document.getElementById("sidebar-username").innerText = NOMBRE_ADMIN;
-        document.getElementById("admin-nombre").value = NOMBRE_ADMIN;
-    }
     
     actualizarTodo();
 }
@@ -39,7 +58,6 @@ function guardarTodo() {
     localStorage.setItem("db_inventario", JSON.stringify(alasql("SELECT * FROM inventario")));
     localStorage.setItem("db_ventas", JSON.stringify(alasql("SELECT * FROM ventas")));
     localStorage.setItem("db_caja", CAJA_CHICA);
-    localStorage.setItem("db_admin_nombre", NOMBRE_ADMIN);
 }
 
 function actualizarTodo() {
@@ -158,7 +176,7 @@ window.venderProducto = function(id) {
 
 window.eliminarProducto = function(id) {
     if(confirm("¿Seguro que quieres eliminar este producto?")) {
-        let pass = prompt("DEMO: La contraseña es 'admin'\n\nIngrese contraseña para eliminar:", "admin");
+        let pass = prompt("ACCIÓN PROTEGIDA (ADMIN)\n\nIngrese contraseña para eliminar:", "admin");
         
         if (pass === "admin") {
             alasql("DELETE FROM inventario WHERE id = ?", [id]);
@@ -166,13 +184,13 @@ window.eliminarProducto = function(id) {
             actualizarTodo();
             alert("Producto eliminado correctamente.");
         } else {
-            alert("Contraseña incorrecta.");
+            alert("Contraseña incorrecta. No tienes permisos.");
         }
     }
 }
 
 window.modificarCaja = function() {
-    let pass = prompt("DEMO: La contraseña es 'admin'\n\nIngrese contraseña de Gerente:", "admin"); 
+    let pass = prompt("ACCIÓN PROTEGIDA (ADMIN)\n\nIngrese contraseña de Gerente:", "admin"); 
     
     if (pass === "admin") {
         let nuevoMonto = prompt("Saldo actual: $" + CAJA_CHICA + "\nIngresa el nuevo saldo de caja:");
@@ -188,14 +206,13 @@ window.modificarCaja = function() {
 }
 
 window.cerrarSesion = function() {
-    if(confirm("¿Cerrar sesión de " + NOMBRE_ADMIN + "?")) {
-        alert("Sesión cerrada.");
+    if(confirm("¿Cerrar sesión actual?")) {
         location.reload(); 
     }
 }
 
 window.borrarHistorial = function() {
-    let pass = prompt("DEMO: La contraseña es 'admin'\n\nIngrese contraseña para BORRAR historial:", "admin");
+    let pass = prompt("ACCIÓN PROTEGIDA (ADMIN)\n\nIngrese contraseña para BORRAR historial:", "admin");
     if(pass === "admin") {
         alasql("DELETE FROM ventas");
         guardarTodo();
@@ -209,7 +226,7 @@ window.borrarHistorial = function() {
 window.reportarPerdida = function(id) {
     let p = alasql("SELECT * FROM inventario WHERE id = ?", [id])[0];
     
-    let pass = prompt("⚠️ REPORTAR PÉRDIDA/DAÑO\n(Modo Demo: La contraseña es 'admin')\n\nIngrese contraseña de administrador:", "admin");
+    let pass = prompt("REPORTAR PÉRDIDA/DAÑO (ADMIN)\n\nIngrese contraseña de administrador:", "admin");
     
     if (pass !== "admin") {
         alert("Contraseña incorrecta. Intente de nuevo usando 'admin'.");
@@ -231,7 +248,7 @@ window.reportarPerdida = function(id) {
         guardarTodo();
         actualizarTodo();
         
-        alert(`✅ REPORTE EXITOSO\n\n- Producto: ${p.nombre}\n- Cantidad perdida: ${cantidad}\n- Descontado de caja: $${perdidaTotal}`);
+        alert(`REPORTE EXITOSO\n\n- Producto: ${p.nombre}\n- Cantidad perdida: ${cantidad}\n- Descontado de caja: $${perdidaTotal}`);
         
     } else if (cantidad > p.stock) {
         alert("Error: No puedes reportar más pérdidas que el stock actual.");
@@ -243,9 +260,9 @@ if(formConfig) {
     formConfig.addEventListener("submit", (e) => {
         e.preventDefault();
         NOMBRE_ADMIN = document.getElementById("admin-nombre").value;
-        guardarTodo();
         document.getElementById("sidebar-username").innerText = NOMBRE_ADMIN;
-        alert("Datos de perfil actualizados.");
+        document.getElementById("avatar-letra").innerText = NOMBRE_ADMIN.charAt(0).toUpperCase();
+        alert("Perfil actualizado para esta sesión.");
     });
 }
 
