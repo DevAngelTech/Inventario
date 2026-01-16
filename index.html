@@ -11,7 +11,9 @@
 <body>
 
 <div class="container">
-    <aside class="sidebar">
+    <div id="mobile-overlay" class="overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
         <h2>SupleAdmin</h2>
         <div class="user-mini-profile">
             <div class="avatar-circle">A</div>
@@ -26,6 +28,13 @@
     </aside>
 
     <main class="main-content">
+        
+        <header>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button id="btn-menu-movil" class="btn-menu">☰</button>
+                <h1 id="titulo-seccion">Panel de Control</h1>
+            </div>
+        </header>
         
         <div class="stats-container">
             <div class="card">
@@ -44,10 +53,10 @@
         </div>
 
         <section id="sec-inventario" class="seccion-activa">
-            <header>
-                <h1>Gestión de Inventario</h1>
-                <button id="btn-abrir-modal" class="btn-primary">+ Nuevo Producto</button>
-            </header>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin:0;">Inventario</h2>
+                <button id="btn-abrir-modal" class="btn-primary">+ Nuevo</button>
+            </div>
             <div class="table-container">
                 <table>
                     <thead>
@@ -55,7 +64,7 @@
                             <th>Producto</th>
                             <th>Precio</th>
                             <th>Stock</th>
-                            <th>Acciones Rápidas</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tabla-inventario"></tbody>
@@ -64,17 +73,17 @@
         </section>
 
         <section id="sec-ventas" class="seccion-oculta">
-            <header>
-                <h1>Historial de Ventas</h1>
-                <button onclick="borrarHistorial()" class="btn-delete">Borrar Historial</button>
-            </header>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin:0;">Historial</h2>
+                <button onclick="borrarHistorial()" class="btn-delete">Borrar Todo</button>
+            </div>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>ID Venta</th>
+                            <th>ID</th>
                             <th>Producto</th>
-                            <th>Cantidad</th>
+                            <th>Cant.</th>
                             <th>Total</th>
                             <th>Fecha</th>
                         </tr>
@@ -85,9 +94,7 @@
         </section>
 
         <section id="sec-config" class="seccion-oculta">
-            <header>
-                <h1>Perfil del Administrador</h1>
-            </header>
+            <h2>Perfil del Administrador</h2>
             <div class="config-card">
                 <h3>Información Personal</h3>
                 <form id="form-config">
