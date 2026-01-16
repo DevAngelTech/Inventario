@@ -253,6 +253,14 @@ td {
 .btn-add { background: var(--green); }
 .btn-sell { background: #334155; }
 
+.btn-loss {
+    background: var(--gold-accent);
+}
+
+.btn-loss:hover {
+    background: #d97706;
+}
+
 .btn-delete {
     background: white;
     color: var(--red-danger);

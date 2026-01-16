@@ -79,6 +79,7 @@ function renderInventario() {
                 <td>
                     <button class="btn-action btn-add" title="Resurtir (+1)" onclick="modificarStock(${p.id}, 1)">+</button>
                     <button class="btn-action btn-sell" title="Vender" onclick="venderProducto(${p.id})">$</button>
+                    <button class="btn-action btn-loss" title="Reportar Pérdida" onclick="reportarPerdida(${p.id})">!</button>
                     <button class="btn-delete" title="Eliminar Producto" onclick="eliminarProducto(${p.id})">Borrar</button>
                 </td>
             </tr>
@@ -157,7 +158,7 @@ window.venderProducto = function(id) {
 
 window.eliminarProducto = function(id) {
     if(confirm("¿Seguro que quieres eliminar este producto?")) {
-        let pass = prompt(" Acción protegida.\nEscribe la contraseña de administrador:", "admin");
+        let pass = prompt("DEMO: La contraseña es 'admin'\n\nIngrese contraseña para eliminar:", "admin");
         
         if (pass === "admin") {
             alasql("DELETE FROM inventario WHERE id = ?", [id]);
@@ -165,13 +166,13 @@ window.eliminarProducto = function(id) {
             actualizarTodo();
             alert("Producto eliminado correctamente.");
         } else {
-            alert(" Contraseña incorrecta. No se eliminó el producto.");
+            alert("Contraseña incorrecta.");
         }
     }
 }
 
 window.modificarCaja = function() {
-    let pass = prompt(" Área restringida.\nEscribe la contraseña de administrador:", "admin"); 
+    let pass = prompt("DEMO: La contraseña es 'admin'\n\nIngrese contraseña de Gerente:", "admin"); 
     
     if (pass === "admin") {
         let nuevoMonto = prompt("Saldo actual: $" + CAJA_CHICA + "\nIngresa el nuevo saldo de caja:");
@@ -182,7 +183,7 @@ window.modificarCaja = function() {
             alert("Caja actualizada correctamente.");
         }
     } else {
-        alert(" Contraseña incorrecta.");
+        alert("Contraseña incorrecta.");
     }
 }
 
@@ -194,12 +195,46 @@ window.cerrarSesion = function() {
 }
 
 window.borrarHistorial = function() {
-    let pass = prompt("Confirmar contraseña para BORRAR historial:", "admin");
+    let pass = prompt("DEMO: La contraseña es 'admin'\n\nIngrese contraseña para BORRAR historial:", "admin");
     if(pass === "admin") {
         alasql("DELETE FROM ventas");
         guardarTodo();
         actualizarTodo();
         alert("Historial limpio.");
+    } else {
+        alert("Contraseña incorrecta.");
+    }
+}
+
+window.reportarPerdida = function(id) {
+    let p = alasql("SELECT * FROM inventario WHERE id = ?", [id])[0];
+    
+    let pass = prompt("⚠️ REPORTAR PÉRDIDA/DAÑO\n(Modo Demo: La contraseña es 'admin')\n\nIngrese contraseña de administrador:", "admin");
+    
+    if (pass !== "admin") {
+        alert("Contraseña incorrecta. Intente de nuevo usando 'admin'.");
+        return;
+    }
+
+    let cantidad = prompt(`Reportando merma de: ${p.nombre}\n\n¿Cuántas piezas se perdieron/dañaron?`, "1");
+    
+    if (cantidad === null) return;
+    cantidad = parseInt(cantidad);
+
+    if (cantidad > 0 && cantidad <= p.stock) {
+        let perdidaTotal = cantidad * p.precio;
+
+        alasql("UPDATE inventario SET stock = stock - ? WHERE id = ?", [cantidad, id]);
+        
+        CAJA_CHICA -= perdidaTotal;
+
+        guardarTodo();
+        actualizarTodo();
+        
+        alert(`✅ REPORTE EXITOSO\n\n- Producto: ${p.nombre}\n- Cantidad perdida: ${cantidad}\n- Descontado de caja: $${perdidaTotal}`);
+        
+    } else if (cantidad > p.stock) {
+        alert("Error: No puedes reportar más pérdidas que el stock actual.");
     }
 }
 
