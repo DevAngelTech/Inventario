@@ -16,14 +16,14 @@
         <p style="color:#64748b; margin-top:0;">Sistema de Gestión</p>
         
         <div class="login-hint">
-            <p style="margin:5px 0;"><strong>Credenciales Demo:</strong></p>
-            <p style="margin:5px 0;">Usuario: <strong>admin</strong> (o tu nombre)</p>
+            <p style="margin:5px 0;"><strong>Instrucciones de Acceso:</strong></p>
+            <p style="margin:5px 0;">Usuario: <strong>Coloca tu nombre</strong></p> 
             <p style="margin:5px 0;">Contraseña: <strong>admin</strong></p>
         </div>
 
-        <form onsubmit="event.preventDefault(); iniciarSesionApp();">
-            <input type="text" id="login-user" placeholder="Usuario" required>
-            <input type="password" id="login-pass" placeholder="Contraseña" required>
+        <form id="form-login">
+            <input type="text" id="login-user" placeholder="Usuario" required autocomplete="username">
+            <input type="password" id="login-pass" placeholder="Contraseña" required autocomplete="current-password">
             <button type="submit" class="btn-primary" style="width:100%; padding:15px;">Iniciar Sesión</button>
         </form>
     </div>
@@ -38,12 +38,12 @@
             <div class="avatar-circle" id="avatar-letra">A</div>
             <span id="sidebar-username">Admin</span>
         </div>
-        <nav>
-            <a href="#" onclick="cambiarSeccion('inventario')" class="nav-link active" id="link-inventario"> Inventario</a>
-            <a href="#" onclick="cambiarSeccion('ventas')" class="nav-link" id="link-ventas"> Ventas</a>
-            <a href="#" onclick="cambiarSeccion('config')" class="nav-link" id="link-config"> Configuración</a>
+        <nav id="sidebar-nav">
+            <a href="#" data-target="inventario" class="nav-link active">Inventario</a>
+            <a href="#" data-target="ventas" class="nav-link">Ventas</a>
+            <a href="#" data-target="config" class="nav-link">Configuración</a>
         </nav>
-        <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+        <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
     </aside>
 
     <main class="main-content">
@@ -59,7 +59,7 @@
             <div class="card">
                 <h3>Dinero en Caja</h3>
                 <p id="stat-caja">$0.00</p>
-                <button onclick="modificarCaja()" class="btn-small-text">Editar (Requiere Pass)</button>
+                <button id="btn-editar-caja" class="btn-small-text">Editar (Requiere Pass)</button>
             </div>
             <div class="card">
                 <h3>Ventas Totales</h3>
@@ -94,7 +94,7 @@
         <section id="sec-ventas" class="seccion-oculta">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="margin:0;">Historial</h2>
-                <button onclick="borrarHistorial()" class="btn-delete">Borrar Todo</button>
+                <button id="btn-borrar-historial" class="btn-delete">Borrar Todo</button>
             </div>
             <div class="table-container">
                 <table>
@@ -133,7 +133,7 @@
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close" id="btn-cerrar-modal">&times;</span>
         <h2>Agregar Producto</h2>
         <form id="form-producto">
             <input type="text" id="nombre" placeholder="Nombre" required>
@@ -142,7 +142,7 @@
                 <option value="Creatina">Creatina</option>
                 <option value="Pre-entreno">Pre-entreno</option>
             </select>
-            <input type="number" id="precio" placeholder="Precio ($)" required>
+            <input type="number" id="precio" placeholder="Precio ($)" required step="0.01">
             <input type="number" id="stock" placeholder="Stock Inicial" required>
             <button type="submit" class="btn-primary">Guardar</button>
         </form>
